@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <menuitem id='hr_hospital_main_menu'
+              name="hr_hospital" sequence="300"/>
+
+    <menuitem id='hr_hospital_menu_doctors'
+              parent='hr_hospital_main_menu'
+              name="doctors" sequence="100"/>
+
+     <menuitem id='hr_hospital_menu_patiens'
+              parent='hr_hospital_main_menu'
+              name="patients" sequence="100"/>
+
+     <menuitem id='hr_hospital_menu_visits'
+              parent='hr_hospital_main_menu'
+              name="visits" sequence="100"/>
+
+     <menuitem id='hr_hospital_menu_diseases'
+              parent='hr_hospital_main_menu'
+              name="diseases" sequence="100"/>
+
+    <menuitem id='hr_hospital_menu_main_settings'
+              parent='hr_hospital_main_menu'
+              name="settings" sequence="900"/>
+    </data>
+</odoo>
