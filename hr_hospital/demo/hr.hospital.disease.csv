@@ -1,0 +1,4 @@
+"id","name","description","patient_id/id"
+"disease_1","Flu","Influenza - viral infection","patient_1"
+"disease_2","Headache","Tension headache","patient_2"
+"disease_3","Cold","Common cold - ARVI","patient_3"
