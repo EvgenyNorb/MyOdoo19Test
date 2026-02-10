@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data>
+<odoo noupdate="1">
     <menuitem id='hr_hospital_main_menu'
               name="hr_hospital" sequence="300"/>
 
@@ -23,5 +22,4 @@
     <menuitem id='hr_hospital_menu_main_settings'
               parent='hr_hospital_main_menu'
               name="settings" sequence="900"/>
-    </data>
 </odoo>
