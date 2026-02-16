@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
         <record id="hr_hospital_patient_tree" model="ir.ui.view">
             <field name="name">hr.hospital.patient.tree</field>
             <field name="model">hr.hospital.patient</field>
             <field name="arch" type="xml">
                 <list string="Patients">
-                    <field name="name"/>
+                    <field name="full_name"/>
                 </list>
             </field>
         </record>
@@ -17,11 +17,29 @@
                 <form string="Patient">
                     <sheet>
                         <group>
-                            <field name="name"/>
+                            <group>
+                                <field name="full_name"/>
+                                <field name="gender"/>
+                                <field name="date_of_birth" widget="datetime"/>
+                                <field name="country_citizenship_id"/>
+                                <field name="language_id"/>
+                                <field name="age"/>
+                                <field name="insurance_number"/>
+                                <field name="passport_number"/>
+                                <field name="blood_type"/>
+                            </group>
+                            <group> string="Medical Info">
+                                <field name="doctor_id"/>
+                                <field name="disease_ids"/>
+                                <field name="contact_person_id"/>
+                                <field name="insurance_company_id"/>
+                                <field name="patient_doc_history_ids"/>
+                                <field name="allergy"/>
+                            </group>
                         </group>
-                        <group string="Medical Info">
-                            <field name="doctor_id"/>
-                            <field name="disease_ids"/>
+                        <group string="Contact info">
+                            <field name="telephone"/>
+                            <field name="email"/>
                         </group>
                     </sheet>
                 </form>

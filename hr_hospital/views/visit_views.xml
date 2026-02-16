@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
         <record id="hr_hospital_visit_tree" model="ir.ui.view">
             <field name="name">hr.hospital.visit.tree ()</field>
             <field name="model">hr.hospital.visit</field>
             <field name="arch" type="xml">
                 <list string="Visit">
-                    <field name="visit_date" widget="datetime"/>
-                    <field name="patient_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
-                    <field name="doctor_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
-                    <field name="comment" widget="text" options="{'color_field': 'color'}"/>
+                    <field name="name"/>
+                    <field name="visit_status"/>
+                    <field name="scheduled_datatime" widget="datetime"/>
+                    <field name="visit_datetime" widget="datetime"/>
                 </list>
             </field>
         </record>
@@ -20,12 +20,21 @@
                 <form string="Visit">
                     <sheet>
                             <group>
-                                <field name="visit_date" widget="datetime"/>
-                                <field name="patient_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
-                                <field name="doctor_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
-                            </group>
-                            <group string="visit comments">
-                                <field name="comment" widget="text" options="{'color_field': 'color'}"/>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="visit_status"/>
+                                    <field name="scheduled_datatime" widget="datetime"/>
+                                    <field name="visit_datetime" widget="datetime"/>
+                                    <field name="type_visit"/>
+                                    <field name="patient_id"  widget="many2one_tags" options="{'color_field': 'color'}"/>
+                                    <field name="doctor_id"  widget="many2one_tags" options="{'color_field': 'color'}"/>
+                                </group>
+                                <group>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="visit_cost"/>
+                                    <field name="medical_diagnosis_ids"  widget="one2many_tags" options="{'color_field': 'color'}"/>
+                                    <field name="recommendations"/>
+                                </group>
                             </group>
                     </sheet>
                 </form>

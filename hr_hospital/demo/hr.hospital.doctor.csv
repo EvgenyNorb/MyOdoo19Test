@@ -1,4 +1,9 @@
-"id","name"
-"doctor_1","Dr. John Smith",
-"doctor_2","Dr. Sarah Johnson"
-"doctor_3","Dr. Michael Brown"
+"id","first_name","last_name","middle_name","gender","date_of_birth","email","telephone","is_intern","doc_mentor_id/id","rating","license_number","license_date","speciality_id/id","Country_of_study_id/id","user_id/id"
+"doctor_1","John","Smith","Robert","Male","1978-05-20","john.smith@hospital.com","+380123456789","False","","4.80","LIC-001234","2015-06-15","hr_hospital.speciality_1","base.ua","base.user_demo"
+"doctor_2","Sarah","Johnson","Marie","Female","1985-08-15","sarah.j@hospital.com","+380987654321","False","","4.95","LIC-005678","2012-03-20","hr_hospital.speciality_2","base.us","base.user_admin"
+"doctor_3","Michael","Brown","James","Male","1998-11-03","michael.b@hospital.com","+380555555555","True","hr_hospital.doctor_1","3.50","LIC-009876","2023-09-01","hr_hospital.speciality_1","base.ua",""
+"doctor_4","Emily","Davis","Ann","Female","1982-03-12","emily.davis@hospital.com","+380111222333","False","","4.75","LIC-002345","2013-07-10","hr_hospital.speciality_3","base.de",""
+"doctor_5","David","Wilson","Alexander","Male","1975-12-25","david.w@hospital.com","+380444555666","False","","4.90","LIC-003456","2010-05-18","hr_hospital.speciality_4","base.uk",""
+"doctor_6","Anna","Martinez","Victoria","Female","1990-06-08","anna.m@hospital.com","+380777888999","False","","4.65","LIC-004567","2016-11-22","hr_hospital.speciality_5","base.pl",""
+"doctor_7","James","Taylor","William","Male","1988-09-14","james.t@hospital.com","+380222333444","False","","4.70","LIC-005678","2014-08-30","hr_hospital.speciality_2","base.fr",""
+"doctor_8","Olivia","Anderson","Grace","Female","1999-04-20","olivia.a@hospital.com","+380666777888","True","hr_hospital.doctor_2","3.45","LIC-006789","2024-01-15","hr_hospital.speciality_2","base.ua",""

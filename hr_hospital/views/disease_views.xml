@@ -1,44 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
-        <record id="hr_hospital_disease_tree" model="ir.ui.view">
-            <field name="name">hr.hospital.disease.tree ()</field>
-            <field name="model">hr.hospital.disease</field>
-            <field name="arch" type="xml">
-                <list string="Disease">
-                    <field name="name"/>
-<!--                    <field name="description"/>-->
-<!--                    <field name="doc_id"/>-->
-<!--                    <field name="patient_ids" widget="one2many_tags" options="{'color_field': 'color'}"/>-->
-                </list>
-            </field>
-        </record>
+<odoo>
+    <!-- List View -->
+    <record id="hr_hospital_disease_tree" model="ir.ui.view">
+        <field name="name">hr.hospital.disease.tree</field>
+        <field name="model">hr.hospital.disease</field>
+        <field name="arch" type="xml">
+            <list string="Diseases"
+                  default_order="parent_path"
+                  expand="1">
+                <field name="name"/>
+                <field name="code_MKX_10"/>
+                <field name="danger_level"/>
+                <field name="is_contagious"/>
+                <field name="parent_path" invisible="1"/>
+            </list>
+        </field>
+    </record>
 
-        <record id="hr_hospital_disease_form" model="ir.ui.view">
-            <field name="name">hr.hospital.disease.form ()</field>
-            <field name="model">hr.hospital.disease</field>
-            <field name="arch" type="xml">
-                <form string="Disease">
-                    <sheet>
-                            <group>
-                                <field name="name"/>
-                                <field name="description"/>
-                                <field name="patient_id"  widget="many2one_tags" options="{'color_field': 'color'}"/>
-                            </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+    <!-- Form View -->
+    <record id="hr_hospital_disease_form" model="ir.ui.view">
+        <field name="name">hr.hospital.disease.form</field>
+        <field name="model">hr.hospital.disease</field>
+        <field name="arch" type="xml">
+            <form string="Disease">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="code_MKX_10"/>
+                            <field name="danger_level"/>
+                            <field name="is_contagious"/>
+                            <field name="symptoms"/>
+                        </group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="parent_id"/>
+                            <field name="distribution_region_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Child Diseases">
+                            <field name="child_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="code_MKX_10"/>
+                                    <field name="danger_level"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_hr_hospital_disease" model="ir.actions.act_window">
-            <field name="name">Disease</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">hr.hospital.disease</field>
-            <field name="view_mode">list,form</field>
-        </record>
+    <!-- Action с иерархией (только корневые элементы) -->
+    <record id="action_hr_hospital_disease_hierarchy" model="ir.actions.act_window">
+        <field name="name">Diseases (Hierarchy)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.hospital.disease</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('parent_id', '=', False)]</field>
+    </record>
 
-        <menuitem id="menu_hr_hospital_disease_action"
-                  name="Disease"
-                  action="action_hr_hospital_disease"
-                  parent="hr_hospital_menu_diseases"
-                  sequence="10"/>
+    <!-- Action со всеми записями (плоский список) -->
+    <record id="action_hr_hospital_disease_all" model="ir.actions.act_window">
+        <field name="name">Diseases (All)</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.hospital.disease</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+    </record>
+
+    <!-- Меню: Diseases (Hierarchy) -->
+    <menuitem id="menu_hr_hospital_disease_hierarchy"
+              name="Diseases (Hierarchy)"
+              action="action_hr_hospital_disease_hierarchy"
+              parent="hr_hospital_menu_diseases"
+              sequence="10"/>
+
+    <!-- Меню: Diseases (All) -->
+    <menuitem id="menu_hr_hospital_disease_all"
+              name="Diseases (All)"
+              action="action_hr_hospital_disease_all"
+              parent="hr_hospital_menu_diseases"
+              sequence="20"/>
 </odoo>

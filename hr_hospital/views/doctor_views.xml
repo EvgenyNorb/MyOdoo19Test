@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
         <record id="hr_hospital_doctor_tree" model="ir.ui.view">
             <field name="name">hr.hospital.doctor.tree ()</field>
             <field name="model">hr.hospital.doctor</field>
             <field name="arch" type="xml">
                 <list string="Doctors">
-                    <field name="name"/>
-<!--                    <field name="description"/>-->
-<!--                    <field name="doc_id"/>-->
+                    <field name="full_name"/>
                     <field name="patient_ids" widget="one2many_tags" options="{'color_field': 'color'}"/>
                 </list>
             </field>
@@ -19,13 +17,34 @@
             <field name="arch" type="xml">
                 <form string="Doctor">
                     <sheet>
+                        <group>
                             <group>
-                                <field name="name"/>
-<!--                                <field name="description"/>-->
+                                <field name="full_name"/>
+                                <field name="first_name"/>
+                                <field name="last_name"/>
+                                <field name="middle_name"/>
+                                <field name="gender"/>
+                                <field name="date_of_birth" widget="datetime"/>
+                                <field name="country_citizenship_id"/>
+                                <field name="language_id"/>
+                                <field name="age"/>
+                                <field name="experience_years"/>
                             </group>
-                            <group string="Pacients history">
-                                <field name="patient_ids"  widget="one2many_tags" options="{'color_field': 'color'}"/>
+                             <group>
+                                <field name="license_date" widget="datetime"/>
+                                <field name="license_number"/>
+                                <field name="experience_years"/>
+                                <field name="is_intern"/>
+                                <field name="doc_mentor_id"/>
+                                <field name="rating"/>
                             </group>
+                        </group>
+                        <group string="Patients history">
+                            <field name="patient_ids"  widget="one2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="speciality_id"  widget="many2one_tags" options="{'color_field': 'color'}"/>
+                            <field name="doctor_schedule_ids"  widget="one2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="Country_of_study_id"  widget="many2one_tags" options="{'color_field': 'color'}"/>
+                        </group>
                     </sheet>
                 </form>
             </field>
