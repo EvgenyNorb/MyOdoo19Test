@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
     <menuitem id='hr_hospital_main_menu'
               name="hr_hospital" sequence="300"/>
 
@@ -18,6 +18,22 @@
      <menuitem id='hr_hospital_menu_diseases'
               parent='hr_hospital_main_menu'
               name="diseases" sequence="100"/>
+
+    <menuitem id='hr_hospital_menu_medical_diagnosis'
+              parent='hr_hospital_main_menu'
+              name="Medical diagnosis" sequence="100"/>
+
+    <menuitem id='hr_hospital_menu_doctors_speciality'
+              parent='hr_hospital_main_menu'
+              name="Doctors speciality" sequence="100"/>
+
+    <menuitem id='hr_hospital_menu_doctors_schedule'
+              parent='hr_hospital_main_menu'
+              name="Doctors schedule" sequence="100"/>
+
+        <menuitem id='hr_hospital_menu_patient_doctor_history'
+              parent='hr_hospital_main_menu'
+              name="Patient doctor history" sequence="100"/>
 
     <menuitem id='hr_hospital_menu_main_settings'
               parent='hr_hospital_main_menu'
