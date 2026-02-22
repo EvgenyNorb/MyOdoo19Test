@@ -29,22 +29,54 @@
                                 <field name="blood_type"/>
                             </group>
                             <group> string="Medical Info">
-                                <field name="doctor_id"/>
-                                <field name="disease_ids"/>
-                                <field name="contact_person_id"/>
-                                <field name="insurance_company_id"/>
-                                <field name="patient_doc_history_ids"/>
+                                <field name="doctor_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
+                                <field name="disease_ids" widget="one2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="contact_person_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
+                                <field name="insurance_company_id" widget="many2one_tags" options="{'color_field': 'color'}"/>
+                                <field name="patient_doc_history_ids" widget="one2many_tags" options="{'color_field': 'color'}"/>
                                 <field name="allergy"/>
                             </group>
-                        </group>
-                        <group string="Contact info">
-                            <field name="telephone"/>
-                            <field name="email"/>
+                            <group string="Patient -Doc history">
+                                <field name="patient_doc_history_ids" widget="one2many_tags" options="{'color_field': 'color'}"/>
+                            </group>
+                            <group>
+                                <div class="oe_button_box" name="button_box">
+                                    <button name="action_view_visits"
+                                            type="object"
+                                            class="oe_stat_button"
+                                            icon="fa-calendar"
+                                            string="Visits history">
+                                    </button>
+                                </div>
+                                <div class="oe_button_box" name="button_box">
+                                    <button name="action_create_visit"
+                                            type="object"
+                                            class="oe_stat_button"
+                                            string="Create new visit">
+                                    </button>
+                                </div>
+                            </group>
+                            <group string="Contact info">
+                                <field name="telephone"/>
+                                <field name="email"/>
+                            </group>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
+
+    <record id="hr_hospital_patient_search" model="ir.ui.view">
+        <field name="name">hr.hospital.patient.search (hr_hospital_patient)</field>
+        <field name="model">hr.hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Full Name"
+                       filter_domain="['|', '|', ('first_name', 'like', self), ('last_name', 'like', self), ('middle_name', 'like', self)]"/>
+                <field name="telephone"/>
+            </search>
+        </field>
+    </record>
 
         <record id="action_hr_hospital_patient" model="ir.actions.act_window">
             <field name="name">Patient</field>

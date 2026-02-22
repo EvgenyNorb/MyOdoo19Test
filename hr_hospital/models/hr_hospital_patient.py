@@ -59,7 +59,6 @@ class HrHospitalPatient(models.Model):
         return super(HrHospitalPatient, self).write(vals)
 
 
-
     # Зберемо повне ім'я
     @api.depends('first_name', 'last_name', 'middle_name')
     def _compute_full_name(self):
@@ -117,3 +116,36 @@ class HrHospitalPatient(models.Model):
 
                 if language:
                     self.language_id = language
+
+    # Кнопка для відкриття форм візитів з відбором по паціенту.
+    def action_view_visits(self):
+        """Відкриває історію візитів поточного пацієнта"""
+        self.ensure_one()
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Visit History: {}'.format(self.name),
+            'res_model': 'hr.hospital.visit',
+            'view_mode': 'list,form',
+            'domain': [('patient_id', '=', self.id)],  # ← Фільтр по поточному пацієнту!
+            'context': {
+                'default_patient_id': self.id,  # Автопідстановка при створенні
+            },
+        }
+
+    #  Кнопка для швиткого створення візиту до лікаря.
+    def action_create_visit(self):
+        """Швидке створення візиту для пацієнта"""
+        self.ensure_one()
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'New Visit for {}'.format(self.name),
+            'res_model': 'hr.hospital.visit',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_patient_id': self.id,
+                'default_doctor_id': self.doctor_id.id if self.doctor_id else False,
+            },
+        }

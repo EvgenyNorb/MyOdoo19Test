@@ -19,7 +19,7 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="full_name"/>
+                                <field name="name"/>
                                 <field name="first_name"/>
                                 <field name="last_name"/>
                                 <field name="middle_name"/>
@@ -45,16 +45,104 @@
                             <field name="doctor_schedule_ids"  widget="one2many_tags" options="{'color_field': 'color'}"/>
                             <field name="Country_of_study_id"  widget="many2one_tags" options="{'color_field': 'color'}"/>
                         </group>
+
+                        <notebook>
+                            <!-- Вкладка: Ментор (якщо заповнено doc_mentor_id) -->
+                            <page string="Mentor Information" invisible="not doc_mentor_id">
+                                <group string="My Mentor">
+                                    <field name="doc_mentor_id" readonly="1"/>
+                                </group>
+                            </page>
+
+                            <!-- Вкладка: Інтерни (якщо є) -->
+                            <page string="My Interns" invisible="not intern_ids">
+                                <field name="intern_ids" mode="kanban">
+                                    <kanban>
+                                        <field name="name"/>
+                                        <field name="speciality_id"/>
+                                        <field name="telephone"/>
+                                        <field name="rating"/>
+                                        <templates>
+                                            <t t-name="card">
+                                                <div class="oe_kanban_card oe_kanban_global_click">
+                                                    <div class="oe_kanban_details">
+                                                        <strong><field name="name"/></strong>
+                                                        <div><i class="fa fa-graduation-cap"/> <field name="speciality_id"/></div>
+                                                        <div><i class="fa fa-phone"/> <field name="telephone"/></div>
+                                                        <div><i class="fa fa-star"/> <field name="rating"/></div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
+
+        <record id="hr_hospital_doctor_search" model="ir.ui.view">
+            <field name="name">hr.hospital.doctor.search (hr_hospital_doctor)</field>
+            <field name="model">hr.hospital.doctor</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="doc_mentor_id" string="Doc mentor"/>
+                    <field name="intern_ids" string="Intern"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="hr_hospital_doctor_kanban" model="ir.ui.view">
+            <field name="name">hr.hospital.doctor.kanban</field>
+            <field name="model">hr.hospital.doctor</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="speciality_id">
+                    <field name="name"/>
+                    <field name="speciality_id"/>
+                    <field name="email"/>
+                    <field name="telephone"/>
+                    <field name="rating"/>
+                    <field name="is_intern"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="speciality_id"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-phone"/> <field name="telephone"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-envelope"/> <field name="email"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-star text-warning"/>
+                                        Rating: <field name="rating"/>
+                                    </div>
+                                    <div t-if="record.is_intern.raw_value">
+                                        <span class="badge badge-info">Intern</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
         <record id="action_hr_hospital_doctor" model="ir.actions.act_window">
             <field name="name">Doctor</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.hospital.doctor</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">list,form,kanban</field>
         </record>
 
         <menuitem id="menu_hr_hospital_doctor_action"
