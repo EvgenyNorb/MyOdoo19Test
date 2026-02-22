@@ -14,6 +14,13 @@ class HrHospitalMedicalDiagnosis(models.Model):
     doctor_approved_id = fields.Many2one(comodel_name='hr.hospital.doctor',string='Approved',readonly=True)
     approved_datetime = fields.Datetime(string='Approved Date',readonly=True)
 
+    country_id = fields.Many2one(
+        comodel_name='res.country',
+        related='visit_id.patient_id.country_citizenship_id',
+        store=True,
+        readonly=True
+    )
+
     severity = fields.Selection([
         ('light','Light'),
         ('medium', 'Medium'),
@@ -21,9 +28,32 @@ class HrHospitalMedicalDiagnosis(models.Model):
         ('critical', 'Critical'),
     ],string='Severity',default='light')
 
+    doctor_id = fields.Many2one(
+        comodel_name='hr.hospital.doctor',
+        string='Doctor',
+        related='visit_id.doctor_id',
+        store=True,
+        readonly=True
+    )
 
-    visit_id = fields.Many2one(comodel_name='hr.hospital.visit',string='Visit',domain=lambda self: self._get_recent_completed_visits_domain())
-    disease_id = fields.Many2one(comodel_name='hr.hospital.disease', string='Disease',domain="[('is_contagious', '=', True), ('danger_level', 'in', ['high', 'critical'])]")
+    # visit_id = fields.Many2one(
+    #     comodel_name='hr.hospital.visit',
+    #     string='Visit',
+    #     domain=lambda self: self._get_recent_completed_visits_domain()
+    # )
+
+    visit_id = fields.Many2one(
+        comodel_name='hr.hospital.visit',
+        string='Visit'
+    )
+
+
+    disease_id = fields.Many2one(
+        comodel_name='hr.hospital.disease',
+        string='Disease',
+        domain="[('is_contagious', '=', True), ('danger_level', 'in', ['high', 'critical'])]"
+    )
+
 
     @api.model
     def _get_recent_completed_visits_domain(self):
@@ -33,9 +63,14 @@ class HrHospitalMedicalDiagnosis(models.Model):
             ('visit_datetime', '>=', date_30_days_ago)
         ]
 
-    # Поля що обчислюються
 
-    # Поля що валідуються
+    @api.onchange('visit_id')
+    def _onchange_visit_domain(self):
+        return {
+            'domain': {
+                'visit_id': self._get_recent_completed_visits_domain()
+            }
+        }
 
     # Автоматичне затвердження при призначенні ментора
     def write(self, vals):

@@ -129,28 +129,54 @@ class HrHospitalVisit(models.Model):
 
 
     # Автоматично заповнюємо ментора
+    # @api.onchange('doctor_id')
+    # def _onchange_doctor_mentor(self):
+    #     if self.doctor_id and self.doctor_id.is_intern: # type: ignore
+    #
+    #         self.mentor_doctor_id = self.doctor_id.doc_mentor_id # type: ignore
+    #
+    #         # Опціонально: показати інформацію
+    #         if self.doctor_id.doc_mentor_id: # type: ignore
+    #             return {
+    #                 'warning': {
+    #                     'title': 'Інформація',
+    #                     'message': 'Лікар {} є інтерном. Ментор: {}'.format(
+    #                         self.doctor_id.name, # type: ignore
+    #                         self.doctor_id.doc_mentor_id.name # type: ignore
+    #                     ),
+    #                 }
+    #             }
+    #         return {}
+    #     return {}
+
     @api.onchange('doctor_id')
     def _onchange_doctor_mentor(self):
+        """Показати попередження якщо обрано лікаря-інтерна"""
         if self.doctor_id and self.doctor_id.is_intern: # type: ignore
-
-            self.mentor_doctor_id = self.doctor_id.doc_mentor_id # type: ignore
-
-            # Опціонально: показати інформацію
-            if self.doctor_id.doc_mentor_id: # type: ignore
+            mentor = self.doctor_id.doc_mentor_id # type: ignore
+            if mentor:
                 return {
                     'warning': {
-                        'title': 'Інформація',
-                        'message': 'Лікар {} є інтерном. Ментор: {}'.format(
+                        'title': 'Увага! Лікар-інтерн',
+                        'message': 'Обраний лікар {} є інтерном.\nМентор: {}'.format(
                             self.doctor_id.name, # type: ignore
-                            self.doctor_id.doc_mentor_id.name # type: ignore
+                            mentor.name
                         ),
                     }
                 }
-            return {}
+            else:
+                return {
+                    'warning': {
+                        'title': 'Увага!',
+                        'message': 'Обраний лікар {} є інтерном без призначеного ментора!'.format(
+                            self.doctor_id.name # type: ignore
+                        ),
+                    }
+                }
         return {}
 
 
-    # показувати алергію при виборі паціента
+        # показувати алергію при виборі паціента
     @api.onchange('patient_id')
     def _onchange_patient_allergy_warning(self):
         if self.patient_id and self.patient_id.allergy: # type: ignore

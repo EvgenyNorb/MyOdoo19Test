@@ -85,13 +85,13 @@ class  HrHospitalDiseaseReportWizard(models.TransientModel):
         }
 
     def _get_group_by_field(self):
-        """Повертає поле для групування"""
         group_by_map = {
-            'doctor': 'visit_id.doctor_id',
+            'doctor': 'doctor_id',  # <-- ВАЖНО
             'disease': 'disease_id',
             'month': 'visit_id.visit_datetime:month',
-            'country': 'visit_id.patient_id.country_citizenship_id',
+            'country': 'country_id',  # создадим отдельное поле
         }
-        return group_by_map.get(self.group_by, '') # type: ignore
+        return group_by_map.get(self.group_by) # type: ignore
+
 
 

@@ -38,6 +38,13 @@ class HrHospitalDoctor(models.Model):
     doc_mentor_id = fields.Many2one(comodel_name='hr.hospital.doctor', string=' Mentor Doctor',
                                     domain=[('is_intern', '=', False)])
 
+    intern_ids = fields.One2many(
+        comodel_name='hr.hospital.doctor',
+        inverse_name='doc_mentor_id',
+        string='Interns',
+        help='Doctors mentored by this doctor'
+    )
+
     rating = fields.Float(string='Rating',digits=(3, 2),default=0.0)
 
     filter_study_country_id = fields.Many2one(

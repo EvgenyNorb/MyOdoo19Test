@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- List View -->
+
+
     <record id="hr_hospital_disease_tree" model="ir.ui.view">
         <field name="name">hr.hospital.disease.tree</field>
         <field name="model">hr.hospital.disease</field>
@@ -17,7 +18,7 @@
         </field>
     </record>
 
-    <!-- Form View -->
+
     <record id="hr_hospital_disease_form" model="ir.ui.view">
         <field name="name">hr.hospital.disease.form</field>
         <field name="model">hr.hospital.disease</field>
@@ -55,7 +56,7 @@
         </field>
     </record>
 
-    <!-- Action с иерархией (только корневые элементы) -->
+
     <record id="action_hr_hospital_disease_hierarchy" model="ir.actions.act_window">
         <field name="name">Diseases (Hierarchy)</field>
         <field name="type">ir.actions.act_window</field>
@@ -64,7 +65,7 @@
         <field name="domain">[('parent_id', '=', False)]</field>
     </record>
 
-    <!-- Action со всеми записями (плоский список) -->
+
     <record id="action_hr_hospital_disease_all" model="ir.actions.act_window">
         <field name="name">Diseases (All)</field>
         <field name="type">ir.actions.act_window</field>
@@ -73,14 +74,28 @@
         <field name="domain">[]</field>
     </record>
 
-    <!-- Меню: Diseases (Hierarchy) -->
+
+    <record id="hr_hospital_disease_search" model="ir.ui.view">
+        <field name="name">hr.hospital.disease.search</field>
+        <field name="model">hr.hospital.disease</field>
+        <field name="arch" type="xml">
+            <search string="Diseases">
+                <field name="name"/>
+                <searchpanel>
+                    <field name="parent_id" hierarchize="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+
     <menuitem id="menu_hr_hospital_disease_hierarchy"
               name="Diseases (Hierarchy)"
               action="action_hr_hospital_disease_hierarchy"
               parent="hr_hospital_menu_diseases"
               sequence="10"/>
 
-    <!-- Меню: Diseases (All) -->
+
     <menuitem id="menu_hr_hospital_disease_all"
               name="Diseases (All)"
               action="action_hr_hospital_disease_all"
