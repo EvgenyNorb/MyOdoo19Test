@@ -9,8 +9,6 @@ class HrHospitalPatient(models.Model):
     _description = 'HR Hospital Patient'
     _inherit = 'hr.hospital.abstract.person'
 
-    name = fields.Char(string='Full Name', compute='_compute_full_name', store=True)
-
     passport_number = fields.Char(string='Passport Number', size=10)
     blood_type = fields.Selection([('1','O(I)'),('2','A(II)'),('3','B(III)'),('4','AB(IV)'),('none','None')], string='Blood Type', default='None')
     allergy = fields.Text(string='Allergy')
@@ -57,16 +55,6 @@ class HrHospitalPatient(models.Model):
                     }])
 
         return super(HrHospitalPatient, self).write(vals)
-
-
-    # Зберемо повне ім'я
-    @api.depends('first_name', 'last_name', 'middle_name')
-    def _compute_full_name(self):
-        for record in self:
-            parts = [record.first_name, record.last_name] # type: ignore
-            if record.middle_name: # type: ignore
-                parts.insert(1, record.middle_name) # type: ignore
-            record.full_name = ' '.join(filter(None, parts))
 
 
     @api.depends('filter_country_id', 'filter_language')
@@ -124,7 +112,7 @@ class HrHospitalPatient(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Visit History: {}'.format(self.name),
+            'name': 'Visit History: {}'.format(self.name), # type: ignore
             'res_model': 'hr.hospital.visit',
             'view_mode': 'list,form',
             'domain': [('patient_id', '=', self.id)],  # ← Фільтр по поточному пацієнту!
@@ -140,7 +128,7 @@ class HrHospitalPatient(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': 'New Visit for {}'.format(self.name),
+            'name': 'New Visit for {}'.format(self.name), # type: ignore
             'res_model': 'hr.hospital.visit',
             'view_mode': 'form',
             'target': 'new',

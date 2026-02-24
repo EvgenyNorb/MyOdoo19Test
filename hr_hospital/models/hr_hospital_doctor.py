@@ -10,8 +10,6 @@ class HrHospitalDoctor(models.Model):
     _description = 'Hospital Doctor'
     _inherit = 'hr.hospital.abstract.person'
 
-    name = fields.Char(string='Full Name', compute='_compute_full_name', store=True)
-
     license_number = fields.Char(string='Licence Number',copy= False)
     license_date = fields.Date(string='Licence Date')
     active = fields.Boolean(string='Active', default=True)
@@ -48,7 +46,7 @@ class HrHospitalDoctor(models.Model):
     rating = fields.Float(string='Rating',digits=(3, 2),default=0.0)
 
     filter_study_country_id = fields.Many2one(
-        'res.country',
+        comodel_name='res.country',
         string='Filter by Study Country',
         store=False,
         help='Select country to filter doctors'
@@ -70,7 +68,7 @@ class HrHospitalDoctor(models.Model):
                         "Неможливо архівувати лікаря '{}'!\n"
                         "Лікар має {} активних візитів. "
                         "Спочатку скасуйте або завершіть всі візити.".format(
-                            record.name,
+                            record.name,  # type: ignore
                             len(active_visits)
                         )
                     )
@@ -94,14 +92,6 @@ class HrHospitalDoctor(models.Model):
          'Рейтинг має бути в діапазоні від 0.00 до 5.00!'),
     ]
 
-    # Зберемо повне ім'я
-    @api.depends('first_name', 'last_name', 'middle_name')
-    def _compute_full_name(self):
-        for record in self:
-            parts = [record.first_name, record.last_name] # type: ignore
-            if record.middle_name: # type: ignore
-                parts.insert(1, record.middle_name) # type: ignore
-            record.full_name = ' '.join(filter(None, parts))
 
     # Відображати "Ім'я (Спеціальність)
 
@@ -109,7 +99,7 @@ class HrHospitalDoctor(models.Model):
         result = []
         for record in self:
             # Отримуємо базове ім'я
-            base_name = record.name if record.name else 'Doctor #{}'.format(record.id)
+            base_name = record.name if record.name else 'Doctor #{}'.format(record.id) # type: ignore
 
             # Формуємо повне відображення
             if record.speciality_id and record.speciality_id.name: # type: ignore

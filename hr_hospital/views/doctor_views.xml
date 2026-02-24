@@ -5,7 +5,7 @@
             <field name="model">hr.hospital.doctor</field>
             <field name="arch" type="xml">
                 <list string="Doctors">
-                    <field name="full_name"/>
+                    <field name="name"/>
                     <field name="patient_ids" widget="one2many_tags" options="{'color_field': 'color'}"/>
                 </list>
             </field>
