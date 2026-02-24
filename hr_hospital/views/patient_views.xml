@@ -5,7 +5,7 @@
             <field name="model">hr.hospital.patient</field>
             <field name="arch" type="xml">
                 <list string="Patients">
-                    <field name="full_name"/>
+                    <field name="name"/>
                 </list>
             </field>
         </record>
@@ -18,7 +18,7 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="full_name"/>
+                                <field name="name"/>
                                 <field name="gender"/>
                                 <field name="date_of_birth" widget="datetime"/>
                                 <field name="country_citizenship_id"/>
