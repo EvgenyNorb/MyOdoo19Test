@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="doctor_report_document">
+        <t t-call="web.external_layout">
+            <t t-foreach="docs" t-as="doctor">
+                <div class="page">
+                    <main>
+
+                        <!-- Заголовок -->
+                        <div class="text-center" style="margin-bottom: 30px;">
+                            <h2>Doctor Report</h2>
+                            <h3>
+                                <span t-field="doctor.name"/>
+                                <t t-if="doctor.speciality_id">
+                                    - <span t-field="doctor.speciality_id.name"/>
+                                </t>
+                            </h3>
+                        </div>
+
+                        <!-- Історія візитів -->
+                        <div style="margin-bottom: 30px;">
+                            <h4 style="border-bottom: 2px solid #3498db; padding-bottom: 5px;">Visit History</h4>
+
+                            <t t-set="visits" t-value="env['hr.hospital.visit'].search([('doctor_id', '=', doctor.id)], order='scheduled_datatime desc', limit=10)"/>
+
+                            <t t-if="visits">
+                                <table class="table table-sm table-bordered" style="margin-top: 15px;">
+                                    <thead style="background-color: #ecf0f1;">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Patient</th>
+                                            <th>Status</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="visits" t-as="visit">
+                                            <tr>
+                                                <td><span t-field="visit.scheduled_datatime"/></td>
+                                                <td><span t-field="visit.patient_id.name"/></td>
+                                                <td><span t-field="visit.visit_status"/></td>
+                                                <td><span t-esc="visit.visit_cost"/> UAH</td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <p>No visit history.</p>
+                            </t>
+                        </div>
+
+                        <!-- Пацієнти -->
+                        <div>
+                            <h4 style="border-bottom: 2px solid #3498db; padding-bottom: 5px;">Patients List</h4>
+
+                            <t t-set="patients" t-value="env['hr.hospital.patient'].search([('doctor_id', '=', doctor.id)])"/>
+
+                            <t t-if="patients">
+                                <table class="table table-sm table-bordered" style="margin-top: 15px;">
+                                    <thead style="background-color: #ecf0f1;">
+                                        <tr>
+                                            <th>Full Name</th>
+                                            <th>Gender</th>
+                                            <th>Birth Date</th>
+                                            <th>Phone</th>
+                                            <th>Visit Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="patients" t-as="patient">
+                                            <t t-set="last_visit" t-value="env['hr.hospital.visit'].search([('patient_id', '=', patient.id), ('doctor_id', '=', doctor.id)], order='scheduled_datatime desc', limit=1)"/>
+                                            <tr>
+                                                <td><span t-field="patient.name"/></td>
+                                                <td><span t-field="patient.gender"/></td>
+                                                <td><span t-field="patient.date_of_birth"/></td>
+                                                <td><span t-esc="patient.telephone or '-'"/></td>
+                                                <td>
+                                                    <t t-if="last_visit">
+                                                        <div t-if="last_visit.visit_status == 'scheduled'" style="background-color: #f39c12; color: white; padding: 5px; text-align: center;">Scheduled</div>
+                                                        <div t-elif="last_visit.visit_status == 'completed'" style="background-color: #27ae60; color: white; padding: 5px; text-align: center;">Completed</div>
+                                                        <div t-elif="last_visit.visit_status == 'cancelled'" style="background-color: #e74c3c; color: white; padding: 5px; text-align: center;">Cancelled</div>
+                                                        <div t-else="" style="background-color: #95a5a6; color: white; padding: 5px; text-align: center;"><span t-esc="last_visit.visit_status"/></div>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div style="background-color: #bdc3c7; padding: 5px; text-align: center;">No visits</div>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <p>No patients assigned.</p>
+                            </t>
+                        </div>
+
+                        <!-- Футер -->
+                        <div class="text-center" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #bdc3c7; font-size: 10pt;">
+                            <p>
+                                <strong>Printed:</strong> <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d.%m.%Y %H:%M')"/><br/>
+                                <strong>Location:</strong> <span t-esc="env.company.city or 'N/A'"/>
+                            </p>
+                        </div>
+
+                    </main>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_doctor" model="ir.actions.report">
+        <field name="name">Doctor Report</field>
+        <field name="model">hr.hospital.doctor</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_hospital.doctor_report_document</field>
+        <field name="report_file">hr_hospital.doctor_report_document</field>
+        <field name="binding_model_id" ref="model_hr_hospital_doctor"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+</odoo>
