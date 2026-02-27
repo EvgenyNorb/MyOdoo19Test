@@ -103,7 +103,6 @@
                                 <strong>Location:</strong> <span t-esc="env.company.city or 'N/A'"/>
                             </p>
                         </div>
-
                     </main>
                 </div>
             </t>
