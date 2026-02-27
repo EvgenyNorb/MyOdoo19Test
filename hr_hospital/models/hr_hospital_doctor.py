@@ -164,3 +164,39 @@ class HrHospitalDoctor(models.Model):
                 raise ValidationError(
                     "Лікар не може бути ментором самому собі!"
                 )
+
+    # для звітів
+    # Повертає історію візитів до лікаря
+    def get_doctor_visits_history(self):
+
+        self.ensure_one()
+        return self.env['hr.hospital.visit'].search(domain=[
+            ('doctor_id', '=', self.id)
+        ], order='scheduled_datatime desc')  # Найновіші зверху
+
+
+    # Повертає пацієнтів з інформацією про останній візит
+    def get_doctor_patients_with_status(self):
+
+        self.ensure_one()
+
+        # Знаходимо всіх пацієнтів лікаря
+        patients = self.env['hr.hospital.patient'].search([
+            ('doctor_id', '=', self.id)
+        ])
+
+        result = []
+        for patient in patients:
+            # Знаходимо останній візит пацієнта до цього лікаря
+            last_visit = self.env['hr.hospital.visit'].search(domain=[
+                ('patient_id', '=', patient.id),
+                ('doctor_id', '=', self.id)
+            ], order='scheduled_datatime desc', limit=1)
+
+            result.append({
+                'patient': patient,
+                'visit_status': last_visit.visit_status if last_visit else False, # type: ignore
+                'visit_date': last_visit.scheduled_datatime if last_visit else False, # type: ignore
+            })
+
+        return result

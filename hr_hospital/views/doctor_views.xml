@@ -106,10 +106,25 @@
                     <field name="telephone"/>
                     <field name="rating"/>
                     <field name="is_intern"/>
+                    <field name="intern_ids"/>
+                    <field name="doc_mentor_id"/>
+
                     <templates>
                         <t t-name="card">
                             <div class="oe_kanban_card oe_kanban_global_click">
                                 <div class="oe_kanban_details">
+                                     <!-- Dropdown Menu -->
+                                    <div class="oe_kanban_bottom_right">
+                                        <div class="oe_dropdown_kanban dropdown">
+                                            <a class="dropdown-toggle o-no-caret btn" role="button" data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                                <span class="fa fa-ellipsis-v"/>
+                                            </a>
+                                            <div class="dropdown-menu" role="menu">
+                                                <a role="menuitem" type="open" class="dropdown-item oe_kanban_action">Edit</a>
+                                                <a role="menuitem" type="delete" class="dropdown-item oe_kanban_action">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <strong class="o_kanban_record_title">
                                         <field name="name"/>
                                     </strong>
@@ -118,16 +133,19 @@
                                     </div>
                                     <div>
                                         <i class="fa fa-phone"/> <field name="telephone"/>
-                                    </div>
-                                    <div>
-                                        <i class="fa fa-envelope"/> <field name="email"/>
-                                    </div>
-                                    <div>
+                                         <i class="fa fa-envelope"/> <field name="email"/>
                                         <i class="fa fa-star text-warning"/>
                                         Rating: <field name="rating"/>
                                     </div>
-                                    <div t-if="record.is_intern.raw_value">
-                                        <span class="badge badge-info">Intern</span>
+
+                                     <!-- Список інтернів (ВИПРАВЛЕНО) -->
+                                    <div t-if="record.intern_ids.raw_value and record.intern_ids.raw_value.length > 0" style="margin-top: 10px; padding: 8px; background-color: #e8f5e9; border-radius: 4px;">
+                                        <strong style="color: #2c3e50;">
+                                            <i class="fa fa-users text-success"/> Interns:
+                                        </strong>
+                                        <div style="margin-top: 5px;">
+                                            <field name="intern_ids" widget="many2many_tags"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

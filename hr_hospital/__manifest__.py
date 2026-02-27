@@ -28,6 +28,7 @@
         'wizard/hr_hospital_reschedule_visit_wizard.view.xml',
         'wizard/hr_hospital_doctor_schedule_wizard.view.xml',
         'wizard/hr_hospital_patient_card_export_wizard.view.xml',
+        'reports/doctor_report_template.xml',
     ],
     'demo': [
         'demo/hr.hospital.doctor.speciality.csv',  # 1. Базова довідкова (немає залежностей)
