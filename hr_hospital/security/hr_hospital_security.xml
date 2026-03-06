@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- category -->
+        <record id="module_category_hr_hospital" model="ir.module.category">
+            <field name="name">Hospital Management</field>
+            <field name="description">User access levels for Hospital module</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- 1. group patient (base) -->
+        <record id="group_hr_hospital_patient" model="res.groups">
+            <field name="name">Patient</field>
+<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="comment">Patient can view only their own visits</field>
+        </record>
+
+        <!-- 2. group intern (inherit patient) -->
+        <record id="group_hr_hospital_intern" model="res.groups">
+            <field name="name">Intern</field>
+<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="implied_ids" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+            <field name="comment">Intern can view and edit their own visits</field>
+        </record>
+
+        <!-- 3. group doctor (inherit intern) -->
+        <record id="group_hr_hospital_doctor" model="res.groups">
+            <field name="name">Doctor</field>
+<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="implied_ids" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+            <field name="comment">Doctor can view and edit their visits and their interns' visits</field>
+        </record>
+
+        <!-- 4. group manager (inherit doctor) -->
+        <record id="group_hr_hospital_manager" model="res.groups">
+            <field name="name">Manager</field>
+<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="implied_ids" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+            <field name="comment">Manager can view all visits</field>
+        </record>
+
+        <!-- 5. group admin (inherit manager) -->
+        <record id="group_hr_hospital_admin" model="res.groups">
+            <field name="name">Administrator</field>
+<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="implied_ids" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+            <field name="comment">Administrator has full access to all data</field>
+        </record>
+
+
+        <!-- RECORD RULES  -->
+
+        <!-- patient - their visits (READ) -->
+        <record id="hr_hospital_visit_rule_patient" model="ir.rule">
+            <field name="name">Patient: Own Visits Only</field>
+            <field name="model_id" ref="model_hr_hospital_visit"/>
+            <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- intern - their visits (READ + WRITE) -->
+        <record id="hr_hospital_visit_rule_intern" model="ir.rule">
+            <field name="name">Intern: Own Visits Read/Write</field>
+            <field name="model_id" ref="model_hr_hospital_visit"/>
+            <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+            <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- doc - their visits + visits intern (READ + WRITE) -->
+        <record id="hr_hospital_visit_rule_doctor" model="ir.rule">
+            <field name="name">Doctor: Own and Interns' Visits</field>
+            <field name="model_id" ref="model_hr_hospital_visit"/>
+            <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+            <field name="domain_force">['|', ('doctor_id.user_id', '=', user.id), ('doctor_id.doc_mentor_id.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- manager - all visits (READ) -->
+        <record id="hr_hospital_visit_rule_manager" model="ir.rule">
+            <field name="name">Manager: All Visits Read Only</field>
+            <field name="model_id" ref="model_hr_hospital_visit"/>
+            <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- admin - all -->
+        <record id="hr_hospital_visit_rule_admin" model="ir.rule">
+            <field name="name">Admin: Full Access</field>
+            <field name="model_id" ref="model_hr_hospital_visit"/>
+            <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

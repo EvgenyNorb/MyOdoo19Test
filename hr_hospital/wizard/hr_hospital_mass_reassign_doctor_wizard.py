@@ -2,6 +2,12 @@ from datetime import datetime
 from odoo import fields, models
 
 class  HrHospitalMassReassignDoctorWizard(models.TransientModel):
+    """
+        Wizard для масового перепризначення пацієнтів іншому лікарю.
+
+        Дозволяє адміністраторам швидко перемістити всіх пацієнтів
+        від одного лікаря до іншого з автоматичним створенням історії змін.
+    """
     _name = 'hr.hospital.mass.reassign.doctor'
     _description = 'HR Hospital Mass Reassign Doctor'
 

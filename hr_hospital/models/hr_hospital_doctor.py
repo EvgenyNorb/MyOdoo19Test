@@ -6,6 +6,13 @@ from dateutil.relativedelta import relativedelta
 
 
 class HrHospitalDoctor(models.Model):
+    """
+       Модель для управління лікарями та медичним персоналом.
+
+       Ця модель зберігає інформацію про лікарів, включаючи їх особисті дані,
+       спеціалізації, кваліфікації, та відносини ментор-інтерн.
+    """
+
     _name = 'hr.hospital.doctor'
     _description = 'Hospital Doctor'
     _inherit = 'hr.hospital.abstract.person'
@@ -15,10 +22,12 @@ class HrHospitalDoctor(models.Model):
     active = fields.Boolean(string='Active', default=True)
 
     patient_ids = fields.One2many(comodel_name='hr.hospital.patient',inverse_name='doctor_id',string='Patients')
-    user_id = fields.Many2one(comodel_name='res.users',string='User')
+    user_id = fields.Many2one(comodel_name='res.users',string='Related User',help='Link doctor to system user for access rights')
     speciality_id = fields.Many2one(comodel_name='hr.hospital.doctor.speciality',string='Speciality')
     doctor_schedule_ids = fields.One2many(comodel_name='hr.hospital.doctor.schedule', inverse_name='doctor_id', string='Doctor Schedule')
     Country_of_study_id = fields.Many2one(comodel_name='res.country',string='Country of Study')
+    intern_ids = fields.One2many(comodel_name='hr.hospital.doctor',inverse_name='doc_mentor_id',string='Interns',help='Doctors mentored by this doctor')
+
 
     filtered_doctor_ids = fields.Many2many(
         comodel_name='hr.hospital.doctor',
@@ -36,12 +45,6 @@ class HrHospitalDoctor(models.Model):
     doc_mentor_id = fields.Many2one(comodel_name='hr.hospital.doctor', string=' Mentor Doctor',
                                     domain=[('is_intern', '=', False)])
 
-    intern_ids = fields.One2many(
-        comodel_name='hr.hospital.doctor',
-        inverse_name='doc_mentor_id',
-        string='Interns',
-        help='Doctors mentored by this doctor'
-    )
 
     rating = fields.Float(string='Rating',digits=(3, 2),default=0.0)
 
@@ -139,14 +142,6 @@ class HrHospitalDoctor(models.Model):
         for record in self:
             if record.doc_mentor_id and not record.is_intern:
                 raise ValidationError("Ментор може бути призначений лише інтернам!")
-
-
-    # # Рейтинг має бути в діапазоні 0.0 до 5.0
-    # @api.constrains('rating')
-    # def _check_rating(self):
-    #     for record in self:
-    #         if record.rating < 0.0 or record.rating > 5.0:
-    #             raise ValidationError("Рейтинг має бути в діапазоні від 0.00 до 5.00!")
 
 
     # Прибераємо ментора, якщо це не інтерн

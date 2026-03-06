@@ -7,8 +7,8 @@ class HrHospitalDisease(models.Model):
     _parent_store = True
     parent_path = fields.Char(index=True)
 
-    name = fields.Char(string='Name',required=True)
-    description = fields.Char(string='Description',required=True)
+    name = fields.Char(string='Name',required=True,translate=True)
+    description = fields.Char(string='Description',required=True,translate=True)
 
     code_MKX_10 = fields.Char(string='Code MKX-10',size=10)
     danger_level = fields.Selection([
