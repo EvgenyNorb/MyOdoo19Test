@@ -5,6 +5,13 @@ from datetime import datetime
 
 
 class HrHospitalVisit(models.Model):
+    """
+        Модель для управління візитами пацієнтів до лікарів.
+
+        Відстежує заплановані та завершені візити, включаючи
+        статус, вартість, рекомендації та зв'язок з діагнозами.
+    """
+
     _name = 'hr.hospital.visit'
     _description = 'HR Hospital Visit'
 

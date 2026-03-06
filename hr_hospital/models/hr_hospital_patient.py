@@ -5,6 +5,13 @@ import datetime
 
 
 class HrHospitalPatient(models.Model):
+    """
+        Модель для управління пацієнтами медичного закладу.
+
+        Зберігає особисті дані пацієнтів, медичну інформацію,
+        історію візитів та зв'язок з лікарями.
+    """
+
     _name = 'hr.hospital.patient'
     _description = 'HR Hospital Patient'
     _inherit = 'hr.hospital.abstract.person'
@@ -19,6 +26,8 @@ class HrHospitalPatient(models.Model):
     contact_person_id = fields.Many2one(comodel_name='hr.hospital.contact.person',string='Contact Person')
     insurance_company_id = fields.Many2one(comodel_name='res.partner',domain=[('is_company', '=', True)],string='Insurance Company')
     patient_doc_history_ids = fields.One2many(comodel_name='hr.hospital.patient.doctor.history',inverse_name='patient_id',string='Patient Doctor History')
+    user_id = fields.Many2one(comodel_name='res.users',string='Related User',help='Link patient to system user for access rights')
+
 
     country_language_patient_ids = fields.Many2many(
         comodel_name='hr.hospital.patient',
