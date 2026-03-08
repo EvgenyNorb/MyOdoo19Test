@@ -27,7 +27,7 @@ class HrHospitalPatient(models.Model):
     insurance_company_id = fields.Many2one(comodel_name='res.partner',domain=[('is_company', '=', True)],string='Insurance Company')
     patient_doc_history_ids = fields.One2many(comodel_name='hr.hospital.patient.doctor.history',inverse_name='patient_id',string='Patient Doctor History')
     user_id = fields.Many2one(comodel_name='res.users',string='Related User',help='Link patient to system user for access rights')
-
+    visit_count = fields.Integer(string='Visits Count',compute='_compute_visit_count')
 
     country_language_patient_ids = fields.Many2many(
         comodel_name='hr.hospital.patient',
@@ -79,6 +79,12 @@ class HrHospitalPatient(models.Model):
 
             record.country_language_patient_ids = self.env['hr.hospital.patient'].search(domain)
 
+
+    def _compute_visit_count(self):
+        for patient in self:
+            patient.visit_count = self.env['hr.hospital.visit'].search_count([
+                ('patient_id', '=', patient.id)
+            ])
 
 
     # Вік пацієнта не може бути 0

@@ -1,9 +1,9 @@
-from odoo.tests import tagged
+# from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 from odoo.exceptions import ValidationError
 from datetime import datetime, timedelta
 
-@tagged('post_install', '-at_install','visit')
+# @tagged('post_install', '-at_install','visit')
 class TestHrHospitalVisit(TransactionCase):
 
     def setUp(self):
@@ -11,6 +11,7 @@ class TestHrHospitalVisit(TransactionCase):
 
         self.speciality = self.env['hr.hospital.doctor.speciality'].create({
             'name': 'Pediatrics',
+            'specialty_code': 'PED',
         })
 
         self.doctor = self.env['hr.hospital.doctor'].create({
@@ -25,6 +26,7 @@ class TestHrHospitalVisit(TransactionCase):
             'last_name': 'Visit',
             'date_of_birth': datetime.today() - timedelta(days=365 * 20),
             'doctor_id': self.doctor.id,
+            'blood_type': '4',
         })
 
 

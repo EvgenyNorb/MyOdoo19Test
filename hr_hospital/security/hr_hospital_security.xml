@@ -3,7 +3,7 @@
     <data noupdate="0">
 
         <!-- category -->
-        <record id="module_category_hr_hospital" model="ir.module.category">
+        <record id="privilege_hr_hospital" model="res.groups.privilege">
             <field name="name">Hospital Management</field>
             <field name="description">User access levels for Hospital module</field>
             <field name="sequence">10</field>
@@ -12,14 +12,14 @@
         <!-- 1. group patient (base) -->
         <record id="group_hr_hospital_patient" model="res.groups">
             <field name="name">Patient</field>
-<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="privilege_id" ref="privilege_hr_hospital"/>
             <field name="comment">Patient can view only their own visits</field>
         </record>
 
         <!-- 2. group intern (inherit patient) -->
         <record id="group_hr_hospital_intern" model="res.groups">
             <field name="name">Intern</field>
-<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="privilege_id" ref="privilege_hr_hospital"/>
             <field name="implied_ids" eval="[(4, ref('group_hr_hospital_patient'))]"/>
             <field name="comment">Intern can view and edit their own visits</field>
         </record>
@@ -27,7 +27,7 @@
         <!-- 3. group doctor (inherit intern) -->
         <record id="group_hr_hospital_doctor" model="res.groups">
             <field name="name">Doctor</field>
-<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="privilege_id" ref="privilege_hr_hospital"/>
             <field name="implied_ids" eval="[(4, ref('group_hr_hospital_intern'))]"/>
             <field name="comment">Doctor can view and edit their visits and their interns' visits</field>
         </record>
@@ -35,7 +35,7 @@
         <!-- 4. group manager (inherit doctor) -->
         <record id="group_hr_hospital_manager" model="res.groups">
             <field name="name">Manager</field>
-<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="privilege_id" ref="privilege_hr_hospital"/>
             <field name="implied_ids" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
             <field name="comment">Manager can view all visits</field>
         </record>
@@ -43,7 +43,7 @@
         <!-- 5. group admin (inherit manager) -->
         <record id="group_hr_hospital_admin" model="res.groups">
             <field name="name">Administrator</field>
-<!--            <field name="category_id" ref="module_category_hr_hospital"/>-->
+            <field name="privilege_id" ref="privilege_hr_hospital"/>
             <field name="implied_ids" eval="[(4, ref('group_hr_hospital_manager'))]"/>
             <field name="comment">Administrator has full access to all data</field>
         </record>

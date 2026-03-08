@@ -252,3 +252,19 @@ class HrHospitalVisit(models.Model):
                         visit_date.strftime('%d.%m.%Y')
                     )
                 )
+
+    @api.constrains('scheduled_datatime')
+    def _check_scheduled_datetime(self):
+        """
+        Валідує що дата візиту не в минулому.
+
+        Перевіряє що заплановані візити мають дату в майбутньому.
+
+        :raises ValidationError: Якщо дата візиту раніше поточного часу
+        :return: None
+        """
+        for visit in self:
+            if visit.scheduled_datatime and visit.scheduled_datatime < datetime.now():
+                raise ValidationError(
+                    "Scheduled date cannot be in the past!"
+                )
