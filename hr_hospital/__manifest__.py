@@ -11,11 +11,6 @@
     'external_dependencies': {
         'python': []
     },
-'test': [
-        'tests/test_doctor.py',
-        'tests/test_patient.py',
-        'tests/test_visit.py',
-    ],
     'data': [
         'security/hr_hospital_security.xml',
         'security/ir.model.access.csv',
